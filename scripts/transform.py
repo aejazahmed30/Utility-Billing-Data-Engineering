@@ -96,9 +96,63 @@ tariff = clean_string_columns(tariff)
 
 print("String columns cleaned.")
 
+# ============================================================
+# 4. Clean numeric columns
+# ============================================================
+
+def clean_numeric_column(df, column):
+    """
+    Convert a column to numeric values.
+    Invalid values are converted to NaN.
+    """
+
+    if column in df.columns:
+        df[column] = pd.to_numeric(
+            df[column],
+            errors="coerce"
+        )
+
+    return df
+
+# Billing numeric columns
+billing = clean_numeric_column(billing, "total_bill_amount")
+billing = clean_numeric_column(billing, "amount_paid")
+billing = clean_numeric_column(billing, "outstanding_balance")
+
+# Meter numeric columns
+meter = clean_numeric_column(meter, "units_consumed")
+meter = clean_numeric_column(meter, "cumulative_reading")
+meter = clean_numeric_column(meter, "current_a")
+meter = clean_numeric_column(meter, "power_factor")
+meter = clean_numeric_column(meter, "peak_demand_kw")
+meter = clean_numeric_column(meter, "reactive_units_kvar")
+
+# Customer numeric columns
+customers = clean_numeric_column(customers, "sanctioned_load_kw")
+customers = clean_numeric_column(customers, "security_deposit")
+customers = clean_numeric_column(customers, "avg_monthly_units")
+
+# ============================================================
+# 5. Numeric cleaning summary
+# ============================================================
+
+print("\n" + "=" * 60)
+print("NUMERIC CLEANING SUMMARY")
+print("=" * 60)
+
+print(
+    f"Billing invalid amounts after conversion: "
+    f"{billing['total_bill_amount'].isna().sum()}"
+)
+
+print(
+    f"Meter invalid units after conversion: "
+    f"{meter['units_consumed'].isna().sum()}"
+)
+
 
 # ---------------------------------------------------------
-# 4. Convert date/time columns
+# 6. Convert date/time columns
 # ---------------------------------------------------------
 
 def convert_date_columns(df):
